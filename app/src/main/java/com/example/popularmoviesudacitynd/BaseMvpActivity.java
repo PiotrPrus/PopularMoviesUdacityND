@@ -43,7 +43,7 @@ public abstract class BaseMvpActivity<V extends MvpView, P extends MvpPresenter<
         super.onCreate(savedInstanceState);
         setContentView(getLayoutId());
         ButterKnife.bind(this);
-        getSupportActionBar();
+        setActionBar(toolbar);
         toolbarMainTitle.setText(getToolbarTitle());
         toolbarLeftButton.setOnClickListener(v -> onLeftButtonClicked());
         toolbarRightButton.setOnClickListener(v -> onRightButtonClicked());
