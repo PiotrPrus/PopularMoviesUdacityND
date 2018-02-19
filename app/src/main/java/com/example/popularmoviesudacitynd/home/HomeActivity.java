@@ -1,11 +1,13 @@
-package com.example.popularmoviesudacitynd;
+package com.example.popularmoviesudacitynd.home;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
+import com.example.popularmoviesudacitynd.BaseMvpActivity;
+import com.example.popularmoviesudacitynd.R;
 import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 
-public class MainActivity extends BaseMvpActivity {
+public class HomeActivity extends BaseMvpActivity {
 
     @Override
     public String getToolbarTitle() {
@@ -15,7 +17,7 @@ public class MainActivity extends BaseMvpActivity {
 
     @Override
     public int getLayoutId() {
-        return R.layout.activity_main;
+        return R.layout.activity_home;
     }
 
     @Override
@@ -26,7 +28,6 @@ public class MainActivity extends BaseMvpActivity {
     @NonNull
     @Override
     public MvpPresenter createPresenter() {
-        //TODO Make presenter
-        return null;
+        return new HomePresenter();
     }
 }

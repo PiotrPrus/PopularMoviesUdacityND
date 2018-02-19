@@ -1,6 +1,7 @@
 package com.example.popularmoviesudacitynd;
 
 import android.os.Bundle;
+import android.os.Debug;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toolbar;
@@ -44,6 +45,7 @@ public abstract class BaseMvpActivity<V extends MvpView, P extends MvpPresenter<
         setContentView(getLayoutId());
         ButterKnife.bind(this);
         setActionBar(toolbar);
+        getActionBar().setDisplayShowTitleEnabled(false);
         toolbarMainTitle.setText(getToolbarTitle());
         toolbarLeftButton.setOnClickListener(v -> onLeftButtonClicked());
         toolbarRightButton.setOnClickListener(v -> onRightButtonClicked());
