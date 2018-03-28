@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.example.popularmoviesudacitynd.BaseMvpActivity;
 import com.example.popularmoviesudacitynd.R;
+import com.example.popularmoviesudacitynd.recycler.PosterGridPresenter;
 import com.example.popularmoviesudacitynd.recycler.PosterRecyclerAdapter;
 import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 
@@ -37,7 +38,8 @@ public class HomeActivity extends BaseMvpActivity {
         recyclerView = findViewById(R.id.home_recycler_view);
         layoutManager = new GridLayoutManager(this, 2, RecyclerView.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        //TODO: implment here the recyclerView.setAdapter(adapter)... + adapter = new PosterRecyclerAdapter(posterPresenter)
+        PosterRecyclerAdapter adapter = new PosterRecyclerAdapter(new PosterGridPresenter());
+        recyclerView.setAdapter(adapter);
     }
 
     @NonNull
