@@ -1,9 +1,12 @@
 package com.example.popularmoviesudacitynd.network;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 import com.google.gson.annotations.SerializedName;
 
-public class ResultsItem{
+public class ResultsItem implements Parcelable{
 
 	@SerializedName("overview")
 	private String overview;
@@ -46,6 +49,56 @@ public class ResultsItem{
 
 	@SerializedName("vote_count")
 	private int voteCount;
+
+	protected ResultsItem(Parcel in) {
+		overview = in.readString();
+		originalLanguage = in.readString();
+		originalTitle = in.readString();
+		video = in.readByte() != 0;
+		title = in.readString();
+		posterPath = in.readString();
+		backdropPath = in.readString();
+		releaseDate = in.readString();
+		voteAverage = in.readDouble();
+		popularity = in.readDouble();
+		id = in.readInt();
+		adult = in.readByte() != 0;
+		voteCount = in.readInt();
+	}
+
+	public static final Creator<ResultsItem> CREATOR = new Creator<ResultsItem>() {
+		@Override
+		public ResultsItem createFromParcel(Parcel in) {
+			return new ResultsItem(in);
+		}
+
+		@Override
+		public ResultsItem[] newArray(int size) {
+			return new ResultsItem[size];
+		}
+	};
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel parcel, int flags) {
+		parcel.writeString(overview);
+		parcel.writeString(originalLanguage);
+		parcel.writeString(originalTitle);
+		parcel.writeByte((byte) (video ? 1 : 0));
+		parcel.writeString(title);
+		parcel.writeString(posterPath);
+		parcel.writeString(backdropPath);
+		parcel.writeString(releaseDate);
+		parcel.writeDouble(voteAverage);
+		parcel.writeDouble(popularity);
+		parcel.writeInt(id);
+		parcel.writeByte((byte) (adult ? 1 : 0));
+		parcel.writeInt(voteCount);
+	}
 
 	public void setOverview(String overview){
 		this.overview = overview;
@@ -161,22 +214,22 @@ public class ResultsItem{
 
 	@Override
  	public String toString(){
-		return 
-			"ResultsItem{" + 
-			"overview = '" + overview + '\'' + 
-			",original_language = '" + originalLanguage + '\'' + 
-			",original_title = '" + originalTitle + '\'' + 
-			",video = '" + video + '\'' + 
-			",title = '" + title + '\'' + 
-			",genre_ids = '" + genreIds + '\'' + 
-			",poster_path = '" + posterPath + '\'' + 
-			",backdrop_path = '" + backdropPath + '\'' + 
-			",release_date = '" + releaseDate + '\'' + 
-			",vote_average = '" + voteAverage + '\'' + 
-			",popularity = '" + popularity + '\'' + 
-			",id = '" + id + '\'' + 
-			",adult = '" + adult + '\'' + 
-			",vote_count = '" + voteCount + '\'' + 
+		return
+			"ResultsItem{" +
+			"overview = '" + overview + '\'' +
+			",original_language = '" + originalLanguage + '\'' +
+			",original_title = '" + originalTitle + '\'' +
+			",video = '" + video + '\'' +
+			",title = '" + title + '\'' +
+			",genre_ids = '" + genreIds + '\'' +
+			",poster_path = '" + posterPath + '\'' +
+			",backdrop_path = '" + backdropPath + '\'' +
+			",release_date = '" + releaseDate + '\'' +
+			",vote_average = '" + voteAverage + '\'' +
+			",popularity = '" + popularity + '\'' +
+			",id = '" + id + '\'' +
+			",adult = '" + adult + '\'' +
+			",vote_count = '" + voteCount + '\'' +
 			"}";
 		}
 }

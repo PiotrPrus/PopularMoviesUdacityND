@@ -1,23 +1,26 @@
 package com.example.popularmoviesudacitynd.recycler;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.example.popularmoviesudacitynd.R;
+import com.example.popularmoviesudacitynd.detail.MovieDetailActivity;
 import com.example.popularmoviesudacitynd.network.ResultsItem;
 
 import java.util.List;
 
-import javax.xml.transform.Result;
-
 public class PosterRecyclerAdapter extends RecyclerView.Adapter<PosterViewHolder>{
 
     private PosterGridPresenter presenter;
+    private Activity activity;
 
-    public PosterRecyclerAdapter(List<ResultsItem> data) {
+    public PosterRecyclerAdapter(Activity activity, List<ResultsItem> data) {
         presenter = new PosterGridPresenter(data);
+        this.activity = activity;
     }
 
     @NonNull
@@ -30,6 +33,10 @@ public class PosterRecyclerAdapter extends RecyclerView.Adapter<PosterViewHolder
     @Override
     public void onBindViewHolder(@NonNull PosterViewHolder holder, int position) {
         presenter.onBindPosterItemViewAtPosition(position, holder);
+        holder.itemView.setOnClickListener(view -> {
+            Intent intent = new Intent(activity, MovieDetailActivity.class);
+            activity.getApplicationContext().startActivity(intent);
+        });
     }
 
     @Override
