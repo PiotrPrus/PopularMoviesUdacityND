@@ -1,16 +1,27 @@
 package com.example.popularmoviesudacitynd.recycler;
 
+import com.example.popularmoviesudacitynd.network.ResultsItem;
+
+import java.util.List;
+
 /**
  * Created by Piotr on 20.02.2018.
  */
 
 public class PosterGridPresenter {
 
-    public void onBindPosterItemViewAtPosition(int position, PosterItemView itemView){
+    private final List<ResultsItem> data;
 
+    PosterGridPresenter(List<ResultsItem> data) {
+        this.data = data;
+    }
+
+    public void onBindPosterItemViewAtPosition(int position, PosterItemView itemView){
+        ResultsItem movie = data.get(position);
+        itemView.setImage(movie.getPosterPath());
     }
 
     public int getPostersItemsCount() {
-        return 0;
+        return data.size();
     }
 }

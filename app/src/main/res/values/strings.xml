@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">PopularMoviesUdacityND</string>
     <string name="toolbar_default">Base toolbar</string>
+    <string name="movie_poster_content_desc">movie poster</string>
 </resources>
