@@ -9,15 +9,16 @@ import com.squareup.picasso.Picasso;
 
 public class PosterViewHolder extends RecyclerView.ViewHolder implements PosterItemView {
 
+    private static final String BASE_URL = "http://image.tmdb.org/t/p/w185/";
     private ImageView posterImageView;
 
-    public PosterViewHolder(View itemView) {
+    PosterViewHolder(View itemView) {
         super(itemView);
         posterImageView = itemView.findViewById(R.id.poster_iv);
     }
 
     @Override
     public void setImage(String imageUrl) {
-        Picasso.with(posterImageView.getContext()).load(imageUrl).into(posterImageView);
+        Picasso.get().load(BASE_URL + imageUrl).into(posterImageView);
     }
 }

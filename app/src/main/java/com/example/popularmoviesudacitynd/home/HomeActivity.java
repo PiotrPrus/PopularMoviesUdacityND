@@ -7,20 +7,18 @@ import android.support.v7.widget.RecyclerView;
 
 import com.example.popularmoviesudacitynd.BaseMvpActivity;
 import com.example.popularmoviesudacitynd.R;
-import com.example.popularmoviesudacitynd.recycler.PosterGridPresenter;
+import com.example.popularmoviesudacitynd.network.ResultsItem;
 import com.example.popularmoviesudacitynd.recycler.PosterRecyclerAdapter;
-import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 
-public class HomeActivity extends BaseMvpActivity {
+import java.util.List;
+
+public class HomeActivity extends BaseMvpActivity<HomeView, HomePresenter> implements HomeView{
 
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter adapter;
-    private RecyclerView.LayoutManager layoutManager;
 
     @Override
     public String getToolbarTitle() {
-        //TODO: Set toolbar title
-        return "test test";
+        return getString(R.string.app_name);
     }
 
     @Override
@@ -32,19 +30,34 @@ public class HomeActivity extends BaseMvpActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setupRecyclerView();
+        presenter.loadData();
     }
 
     private void setupRecyclerView() {
         recyclerView = findViewById(R.id.home_recycler_view);
-        layoutManager = new GridLayoutManager(this, 2, RecyclerView.VERTICAL, false);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2, RecyclerView.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        PosterRecyclerAdapter adapter = new PosterRecyclerAdapter(new PosterGridPresenter());
-        recyclerView.setAdapter(adapter);
     }
 
     @NonNull
     @Override
-    public MvpPresenter createPresenter() {
+    public HomePresenter createPresenter() {
         return new HomePresenter();
+    }
+
+    @Override
+    public void onStartLoading() {
+
+    }
+
+    @Override
+    public void onLoadCompleted(List<ResultsItem> data) {
+        PosterRecyclerAdapter adapter = new PosterRecyclerAdapter(data);
+        recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onLoadError() {
+
     }
 }
