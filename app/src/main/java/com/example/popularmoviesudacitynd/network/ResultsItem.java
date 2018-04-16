@@ -8,6 +8,8 @@ import com.google.gson.annotations.SerializedName;
 
 public class ResultsItem implements Parcelable{
 
+	public static final String KEY_MOVIE_DATA = "KEY_MOVIE_DATA";
+
 	@SerializedName("overview")
 	private String overview;
 
@@ -50,7 +52,27 @@ public class ResultsItem implements Parcelable{
 	@SerializedName("vote_count")
 	private int voteCount;
 
-	protected ResultsItem(Parcel in) {
+	public ResultsItem(String overview, String originalLanguage, String originalTitle, boolean video,
+					   String title, List<Integer> genreIds, String posterPath, String backdropPath,
+					   String releaseDate, double voteAverage, double popularity, int id,
+					   boolean adult, int voteCount) {
+		this.overview = overview;
+		this.originalLanguage = originalLanguage;
+		this.originalTitle = originalTitle;
+		this.video = video;
+		this.title = title;
+		this.genreIds = genreIds;
+		this.posterPath = posterPath;
+		this.backdropPath = backdropPath;
+		this.releaseDate = releaseDate;
+		this.voteAverage = voteAverage;
+		this.popularity = popularity;
+		this.id = id;
+		this.adult = adult;
+		this.voteCount = voteCount;
+	}
+
+	public ResultsItem(Parcel in) {
 		overview = in.readString();
 		originalLanguage = in.readString();
 		originalTitle = in.readString();

@@ -17,10 +17,12 @@ public class PosterRecyclerAdapter extends RecyclerView.Adapter<PosterViewHolder
 
     private PosterGridPresenter presenter;
     private Activity activity;
+    private List<ResultsItem> data;
 
     public PosterRecyclerAdapter(Activity activity, List<ResultsItem> data) {
         presenter = new PosterGridPresenter(data);
         this.activity = activity;
+        this.data = data;
     }
 
     @NonNull
@@ -35,6 +37,8 @@ public class PosterRecyclerAdapter extends RecyclerView.Adapter<PosterViewHolder
         presenter.onBindPosterItemViewAtPosition(position, holder);
         holder.itemView.setOnClickListener(view -> {
             Intent intent = new Intent(activity, MovieDetailActivity.class);
+            ResultsItem item = data.get(position);
+            intent.putExtra(ResultsItem.KEY_MOVIE_DATA, item);
             activity.getApplicationContext().startActivity(intent);
         });
     }
