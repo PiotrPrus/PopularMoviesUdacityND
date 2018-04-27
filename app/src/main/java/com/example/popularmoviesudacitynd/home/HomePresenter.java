@@ -24,6 +24,7 @@ public class HomePresenter extends MvpBasePresenter<HomeView> {
     private List<ResultsItem> data;
 
     public void loadData() {
+        Objects.requireNonNull(getView()).onStartLoading();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://api.themoviedb.org/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -44,6 +45,7 @@ public class HomePresenter extends MvpBasePresenter<HomeView> {
             @Override
             public void onFailure(@NonNull Call<PopularMoviePOJO> call, @NonNull Throwable t) {
                 Log.w(TAG, "Error trying parse Json" + t.getMessage());
+                Objects.requireNonNull(getView()).onLoadError();
             }
         });
     }
