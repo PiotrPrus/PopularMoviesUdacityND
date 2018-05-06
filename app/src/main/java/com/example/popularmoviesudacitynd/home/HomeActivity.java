@@ -25,11 +25,6 @@ public class HomeActivity extends BaseMvpActivity<HomeView, HomePresenter> imple
     ProgressBar homeProgressBar;
 
     @Override
-    public String getToolbarTitle() {
-        return getString(R.string.app_name);
-    }
-
-    @Override
     public int getLayoutId() {
         return R.layout.activity_home;
     }

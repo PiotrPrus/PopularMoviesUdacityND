@@ -3,4 +3,5 @@
     <string name="toolbar_default">Base toolbar</string>
     <string name="movie_poster_content_desc">movie poster</string>
     <string name="home_unable_to_fetch_data">Unable to fetch data</string>
+    <string name="desc_movie_detail_image">Image with movie selected movie poster</string>
 </resources>
