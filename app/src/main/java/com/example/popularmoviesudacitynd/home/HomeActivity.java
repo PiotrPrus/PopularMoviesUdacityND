@@ -18,9 +18,10 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class HomeActivity extends BaseMvpActivity<HomeView, HomePresenter> implements HomeView{
+public class HomeActivity extends BaseMvpActivity<HomeView, HomePresenter> implements HomeView {
 
-    private RecyclerView recyclerView;
+    @BindView(R.id.home_recycler_view)
+    RecyclerView recyclerView;
     @BindView(R.id.home_progress_bar)
     ProgressBar homeProgressBar;
 
@@ -33,14 +34,7 @@ public class HomeActivity extends BaseMvpActivity<HomeView, HomePresenter> imple
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
-        setupRecyclerView();
         presenter.loadData();
-    }
-
-    private void setupRecyclerView() {
-        recyclerView = findViewById(R.id.home_recycler_view);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2, RecyclerView.VERTICAL, false);
-        recyclerView.setLayoutManager(layoutManager);
     }
 
     @NonNull
@@ -51,14 +45,21 @@ public class HomeActivity extends BaseMvpActivity<HomeView, HomePresenter> imple
 
     @Override
     public void onStartLoading() {
-    homeProgressBar.setVisibility(View.VISIBLE);
+        homeProgressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onLoadCompleted(List<ResultsItem> data) {
         PosterRecyclerAdapter adapter = new PosterRecyclerAdapter(this, data);
+        setupRecyclerView();
         recyclerView.setAdapter(adapter);
         homeProgressBar.setVisibility(View.GONE);
+    }
+
+    private void setupRecyclerView() {
+        recyclerView.setHasFixedSize(true);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2, RecyclerView.VERTICAL, false);
+        recyclerView.setLayoutManager(layoutManager);
     }
 
     @Override

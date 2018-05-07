@@ -4,8 +4,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import com.example.popularmoviesudacitynd.BaseMvpActivity;
 import com.example.popularmoviesudacitynd.R;
@@ -35,13 +37,14 @@ public class MovieDetailActivity extends BaseMvpActivity<DetailView, DetailPrese
     CollapsingToolbarLayout collapsingToolbarLayout;
     @BindView(R.id.detail_app_bar)
     AppBarLayout appBarLayout;
+    @BindView(R.id.detail_back_button)
+    ImageView detailBackButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
         ResultsItem movie = getIntent().getExtras().getParcelable(ResultsItem.KEY_MOVIE_DATA);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
         overviewTv.setText(movie.getOverview());
         titleTv.setText(movie.getTitle());
         initAppBar(movie.getTitle());
@@ -63,9 +66,11 @@ public class MovieDetailActivity extends BaseMvpActivity<DetailView, DetailPrese
                 }
                 if (scrollRange + verticalOffset == 0) {
                     collapsingToolbarLayout.setTitle(title);
+                    detailBackButton.setVisibility(View.VISIBLE);
                     isShow = true;
                 } else if (isShow) {
                     collapsingToolbarLayout.setTitle(" ");
+                    detailBackButton.setVisibility(View.GONE);
                     isShow = false;
                 }
             }

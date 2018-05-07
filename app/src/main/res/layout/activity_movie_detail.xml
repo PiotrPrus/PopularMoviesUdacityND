@@ -9,7 +9,7 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/detail_app_bar"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="200dp"
         android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
@@ -31,11 +31,22 @@
                 app:layout_collapseMode="parallax" />
 
             <android.support.v7.widget.Toolbar
+                android:id="@+id/detail_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
-                android:background="@android:color/transparent"
                 app:layout_collapseMode="pin"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+                <ImageView
+                    android:id="@+id/detail_back_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:paddingEnd="16dp"
+                    android:src="@drawable/ic_arrow_back_white_24dp"
+                    android:visibility="gone"
+                    tools:ignore="ContentDescription,RtlSymmetry" />
+            </android.support.v7.widget.Toolbar>
 
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
