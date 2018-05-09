@@ -2,8 +2,12 @@ package com.example.popularmoviesudacitynd.home;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -18,16 +22,16 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class HomeActivity extends BaseMvpActivity<HomeView, HomePresenter> implements HomeView{
+public class HomeActivity extends BaseMvpActivity<HomeView, HomePresenter> implements HomeView {
 
-    private RecyclerView recyclerView;
+    @BindView(R.id.home_recycler_view)
+    RecyclerView recyclerView;
     @BindView(R.id.home_progress_bar)
     ProgressBar homeProgressBar;
-
-    @Override
-    public String getToolbarTitle() {
-        return getString(R.string.app_name);
-    }
+    @BindView(R.id.drawer_layout)
+    DrawerLayout drawerLayout;
+    @BindView(R.id.nav_view)
+    NavigationView navigationView;
 
     @Override
     public int getLayoutId() {
@@ -38,14 +42,30 @@ public class HomeActivity extends BaseMvpActivity<HomeView, HomePresenter> imple
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
-        setupRecyclerView();
+        initMenu();
         presenter.loadData();
     }
 
-    private void setupRecyclerView() {
-        recyclerView = findViewById(R.id.home_recycler_view);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2, RecyclerView.VERTICAL, false);
-        recyclerView.setLayoutManager(layoutManager);
+    private void initMenu() {
+        navigationView.setNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.nav_popular: {
+                    // do something here
+                    break;
+                }
+                case R.id.nav_top_rated: {
+                    //do something here
+                    break;
+                }
+                case R.id.nav_favorite: {
+                    //do something here
+                    break;
+                }
+            }
+            item.setChecked(true);
+            drawerLayout.closeDrawer(GravityCompat.START);
+            return true;
+        });
     }
 
     @NonNull
@@ -56,14 +76,21 @@ public class HomeActivity extends BaseMvpActivity<HomeView, HomePresenter> imple
 
     @Override
     public void onStartLoading() {
-    homeProgressBar.setVisibility(View.VISIBLE);
+        homeProgressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onLoadCompleted(List<ResultsItem> data) {
         PosterRecyclerAdapter adapter = new PosterRecyclerAdapter(this, data);
+        setupRecyclerView();
         recyclerView.setAdapter(adapter);
         homeProgressBar.setVisibility(View.GONE);
+    }
+
+    private void setupRecyclerView() {
+        recyclerView.setHasFixedSize(true);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2, RecyclerView.VERTICAL, false);
+        recyclerView.setLayoutManager(layoutManager);
     }
 
     @Override

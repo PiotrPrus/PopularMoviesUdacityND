@@ -3,4 +3,10 @@
     <string name="toolbar_default">Base toolbar</string>
     <string name="movie_poster_content_desc">movie poster</string>
     <string name="home_unable_to_fetch_data">Unable to fetch data</string>
+    <string name="desc_movie_detail_image">Image with movie selected movie poster</string>
+    <string name="detail_overview_header_text">Overview</string>
+    <string name="menu_title_popular">Popular movies</string>
+    <string name="menu_title_top_rated">Top rated movies</string>
+    <string name="menu_title_favorite">Favorite movies</string>
+    <string name="header_title">Movies database</string>
 </resources>
