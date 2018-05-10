@@ -21,6 +21,7 @@ import com.example.popularmoviesudacitynd.R;
 import com.example.popularmoviesudacitynd.network.ResultsItem;
 import com.example.popularmoviesudacitynd.recycler.PosterRecyclerAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -36,6 +37,7 @@ public class HomeActivity extends BaseMvpActivity<HomeView, HomePresenter> imple
     DrawerLayout drawerLayout;
     @BindView(R.id.nav_view)
     NavigationView navigationView;
+    private PosterRecyclerAdapter adapter;
 
     @Override
     public int getLayoutId() {
@@ -48,7 +50,8 @@ public class HomeActivity extends BaseMvpActivity<HomeView, HomePresenter> imple
         ButterKnife.bind(this);
         checkNetworkAvailability();
         initMenu();
-        presenter.loadData();
+        initRecyclerView();
+        presenter.loadData(HomePresenter.MovieListType.POPULAR);
     }
 
     private void checkNetworkAvailability() {
@@ -60,11 +63,11 @@ public class HomeActivity extends BaseMvpActivity<HomeView, HomePresenter> imple
         navigationView.setNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.nav_popular: {
-                    // do something here
+                    presenter.loadData(HomePresenter.MovieListType.POPULAR);
                     break;
                 }
                 case R.id.nav_top_rated: {
-                    //do something here
+                    presenter.loadData(HomePresenter.MovieListType.TOP_RATED);
                     break;
                 }
                 case R.id.nav_favorite: {
@@ -91,16 +94,17 @@ public class HomeActivity extends BaseMvpActivity<HomeView, HomePresenter> imple
 
     @Override
     public void onLoadCompleted(List<ResultsItem> data) {
-        PosterRecyclerAdapter adapter = new PosterRecyclerAdapter(this, data);
-        setupRecyclerView();
+        adapter.setData(data);
         recyclerView.setAdapter(adapter);
         homeProgressBar.setVisibility(View.GONE);
+        adapter.notifyDataSetChanged();
     }
 
-    private void setupRecyclerView() {
+    private void initRecyclerView() {
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2, RecyclerView.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
+        adapter = new PosterRecyclerAdapter(this);
     }
 
     @Override

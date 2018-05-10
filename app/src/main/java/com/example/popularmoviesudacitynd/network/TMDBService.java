@@ -6,5 +6,7 @@ import retrofit2.http.Query;
 
 public interface TMDBService {
     @GET("3/movie/popular")
-    Call<PopularMoviePOJO> getJson(@Query("api_key") String apiKey);
+    Call<PopularMoviePOJO> getPopularMoviesJson(@Query("api_key") String apiKey);
+    @GET("3/movie/top_rated")
+    Call<PopularMoviePOJO> getTopRatedMoviesJson(@Query("api_key") String apiKey);
 }

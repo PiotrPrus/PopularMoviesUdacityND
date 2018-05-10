@@ -25,15 +25,20 @@ public class HomePresenter extends MvpBasePresenter<HomeView> {
     private final static String TAG = HomePresenter.class.getSimpleName();
     private List<ResultsItem> data;
 
-    public void loadData() {
+    public void loadData(MovieListType listType) {
         Objects.requireNonNull(getView()).onStartLoading();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://api.themoviedb.org/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         TMDBService service = retrofit.create(TMDBService.class);
-        Call<PopularMoviePOJO> call = service.getJson(BuildConfig.TMDB_API_KEY);
-        call.enqueue(new Callback<PopularMoviePOJO>() {
+        Call<PopularMoviePOJO> call = null;
+        if (listType == MovieListType.POPULAR) {
+            call = service.getPopularMoviesJson(BuildConfig.TMDB_API_KEY);
+        } else if (listType == MovieListType.TOP_RATED) {
+            call = service.getTopRatedMoviesJson(BuildConfig.TMDB_API_KEY);
+        }
+        Objects.requireNonNull(call).enqueue(new Callback<PopularMoviePOJO>() {
             @Override
             public void onResponse(@NonNull Call<PopularMoviePOJO> call, @NonNull Response<PopularMoviePOJO> response) {
 
@@ -60,5 +65,8 @@ public class HomePresenter extends MvpBasePresenter<HomeView> {
         if ((wifiInfo == null || !wifiInfo.isConnected()) && (mobileInfo == null || !mobileInfo.isConnected())) {
             Objects.requireNonNull(getView()).onInternetCheckFailed();
         }
+    }
+    enum MovieListType {
+        POPULAR, TOP_RATED
     }
 }
