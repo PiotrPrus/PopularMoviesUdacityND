@@ -9,4 +9,5 @@ interface HomeView extends MvpView {
     void onStartLoading();
     void onLoadCompleted(List<ResultsItem> data);
     void onLoadError();
+    void onInternetCheckFailed();
 }

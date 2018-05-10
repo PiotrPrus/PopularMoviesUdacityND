@@ -1,5 +1,7 @@
 package com.example.popularmoviesudacitynd.home;
 
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -48,5 +50,15 @@ public class HomePresenter extends MvpBasePresenter<HomeView> {
                 Objects.requireNonNull(getView()).onLoadError();
             }
         });
+    }
+
+    public void isNetworkConnection(ConnectivityManager connectivityManager) {
+
+        NetworkInfo wifiInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        NetworkInfo mobileInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
+        if ((wifiInfo == null || !wifiInfo.isConnected()) && (mobileInfo == null || !mobileInfo.isConnected())) {
+            Objects.requireNonNull(getView()).onInternetCheckFailed();
+        }
     }
 }

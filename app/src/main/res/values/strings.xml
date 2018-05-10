@@ -9,4 +9,8 @@
     <string name="menu_title_top_rated">Top rated movies</string>
     <string name="menu_title_favorite">Favorite movies</string>
     <string name="header_title">Movies database</string>
+
+    <string name="home_screen_internet_connection_message">In order to use this application, you need to enable internet connection</string>
+    <string name="home_screen_internet_connection_no">Quit</string>
+    <string name="home_screen_internet_connection_ok">Settings</string>
 </resources>

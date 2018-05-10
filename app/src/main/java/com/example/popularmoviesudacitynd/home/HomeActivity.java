@@ -1,13 +1,17 @@
 package com.example.popularmoviesudacitynd.home;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -42,8 +46,14 @@ public class HomeActivity extends BaseMvpActivity<HomeView, HomePresenter> imple
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
+        checkNetworkAvailability();
         initMenu();
         presenter.loadData();
+    }
+
+    private void checkNetworkAvailability() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        presenter.isNetworkConnection(connectivityManager);
     }
 
     private void initMenu() {
@@ -96,5 +106,21 @@ public class HomeActivity extends BaseMvpActivity<HomeView, HomePresenter> imple
     @Override
     public void onLoadError() {
         Toast.makeText(this, getString(R.string.home_unable_to_fetch_data), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onInternetCheckFailed() {
+        showNoNetworkConnectivityDialog();
+    }
+
+    private void showNoNetworkConnectivityDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(getString(R.string.home_screen_internet_connection_message))
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.home_screen_internet_connection_ok), (dialog, which) ->
+                        startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS)))
+                .setNegativeButton(getString(R.string.home_screen_internet_connection_no), (dialog, which) -> finish());
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }
