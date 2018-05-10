@@ -15,13 +15,14 @@ import java.util.List;
 
 public class PosterRecyclerAdapter extends RecyclerView.Adapter<PosterViewHolder>{
 
-    private PosterGridPresenter presenter;
     private Activity activity;
     private List<ResultsItem> data;
 
-    public PosterRecyclerAdapter(Activity activity, List<ResultsItem> data) {
-        presenter = new PosterGridPresenter(data);
+    public PosterRecyclerAdapter(Activity activity) {
         this.activity = activity;
+    }
+
+    public void setData(List<ResultsItem> data) {
         this.data = data;
     }
 
@@ -34,7 +35,7 @@ public class PosterRecyclerAdapter extends RecyclerView.Adapter<PosterViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull PosterViewHolder holder, int position) {
-        presenter.onBindPosterItemViewAtPosition(position, holder);
+        onBindPosterItemViewAtPosition(position, holder);
         holder.itemView.setOnClickListener(view -> {
             Intent intent = new Intent(activity, MovieDetailActivity.class);
             ResultsItem item = data.get(position);
@@ -45,6 +46,11 @@ public class PosterRecyclerAdapter extends RecyclerView.Adapter<PosterViewHolder
 
     @Override
     public int getItemCount() {
-        return presenter.getPostersItemsCount();
+        return data.size();
+    }
+
+    private void onBindPosterItemViewAtPosition(int position, PosterItemView itemView){
+        ResultsItem movie = data.get(position);
+        itemView.setImage(movie.getPosterPath());
     }
 }
