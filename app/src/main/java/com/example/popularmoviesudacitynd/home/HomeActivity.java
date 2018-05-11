@@ -9,9 +9,12 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -37,6 +40,9 @@ public class HomeActivity extends BaseMvpActivity<HomeView, HomePresenter> imple
     DrawerLayout drawerLayout;
     @BindView(R.id.nav_view)
     NavigationView navigationView;
+    @BindView(R.id.home_toolbar)
+    Toolbar homeToolbar;
+
     private PosterRecyclerAdapter adapter;
 
     @Override
@@ -49,9 +55,28 @@ public class HomeActivity extends BaseMvpActivity<HomeView, HomePresenter> imple
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
         checkNetworkAvailability();
-        initMenu();
+        initUI();
         initRecyclerView();
         presenter.loadData(HomePresenter.MovieListType.POPULAR);
+    }
+
+    private void initUI() {
+        setSupportActionBar(homeToolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_24px);
+        homeToolbar.setTitle(R.string.app_name);
+        initMenu();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                drawerLayout.openDrawer(GravityCompat.START);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void checkNetworkAvailability() {
