@@ -16,6 +16,7 @@ import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MovieDetailActivity extends BaseMvpActivity<DetailView, DetailPresenter> implements DetailView {
 
@@ -39,6 +40,10 @@ public class MovieDetailActivity extends BaseMvpActivity<DetailView, DetailPrese
     AppBarLayout appBarLayout;
     @BindView(R.id.detail_back_button)
     ImageView detailBackButton;
+    @OnClick(R.id.detail_back_button)
+    public void onTopClicked(){
+        onBackPressed();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
