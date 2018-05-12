@@ -56,7 +56,6 @@ public class HomeActivity extends BaseMvpActivity<HomeView, HomePresenter> imple
         ButterKnife.bind(this);
         checkNetworkAvailability();
         initUI();
-        initRecyclerView();
         presenter.loadData(HomePresenter.MovieListType.POPULAR);
     }
 
@@ -67,6 +66,7 @@ public class HomeActivity extends BaseMvpActivity<HomeView, HomePresenter> imple
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_24px);
         homeToolbar.setTitle(R.string.app_name);
         initMenu();
+        initRecyclerView();
     }
 
     @Override
@@ -119,16 +119,16 @@ public class HomeActivity extends BaseMvpActivity<HomeView, HomePresenter> imple
 
     @Override
     public void onLoadCompleted(List<ResultsItem> data) {
+        homeProgressBar.setVisibility(View.GONE);
         adapter.setData(data);
         recyclerView.setAdapter(adapter);
-        homeProgressBar.setVisibility(View.GONE);
         adapter.notifyDataSetChanged();
     }
 
     private void initRecyclerView() {
-        recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2, RecyclerView.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setHasFixedSize(true);
         adapter = new PosterRecyclerAdapter(this);
     }
 
