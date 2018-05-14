@@ -4,10 +4,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.view.View;
+import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toolbar;
 
 import com.example.popularmoviesudacitynd.BaseMvpActivity;
 import com.example.popularmoviesudacitynd.R;
@@ -16,7 +15,6 @@ import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class MovieDetailActivity extends BaseMvpActivity<DetailView, DetailPresenter> implements DetailView {
 
@@ -34,16 +32,8 @@ public class MovieDetailActivity extends BaseMvpActivity<DetailView, DetailPrese
     ImageView backdropIv;
     @BindView(R.id.detail_poster_iv)
     ImageView posterIv;
-    @BindView(R.id.collapsing_toolbar)
-    CollapsingToolbarLayout collapsingToolbarLayout;
-    @BindView(R.id.detail_app_bar)
-    AppBarLayout appBarLayout;
-    @BindView(R.id.detail_back_button)
-    ImageView detailBackButton;
-    @OnClick(R.id.detail_back_button)
-    public void onTopClicked(){
-        onBackPressed();
-    }
+    @BindView(R.id.detail_toolbar)
+    Toolbar detailToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,30 +46,13 @@ public class MovieDetailActivity extends BaseMvpActivity<DetailView, DetailPrese
         ratingTv.setText(String.valueOf(movie.getVoteAverage()));
         releaseDateTv.setText(movie.getReleaseDate());
         Picasso.get().load(BASE_URL + movie.getPosterPath()).into(posterIv);
-        Picasso.get().load(BASE_URL + movie.getPosterPath()).into(backdropIv);
+        Picasso.get().load(BASE_URL + movie.getBackdropPath()).into(backdropIv);
     }
 
     private void initAppBar(String title) {
-        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            boolean isShow = true;
-            int scrollRange = -1;
-
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if (scrollRange == -1) {
-                    scrollRange = appBarLayout.getTotalScrollRange();
-                }
-                if (scrollRange + verticalOffset == 0) {
-                    collapsingToolbarLayout.setTitle(title);
-                    detailBackButton.setVisibility(View.VISIBLE);
-                    isShow = true;
-                } else if (isShow) {
-                    collapsingToolbarLayout.setTitle(" ");
-                    detailBackButton.setVisibility(View.GONE);
-                    isShow = false;
-                }
-            }
-        });
+        setSupportActionBar(detailToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(title);
     }
 
     @Override
