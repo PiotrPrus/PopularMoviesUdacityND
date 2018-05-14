@@ -145,7 +145,6 @@ public class HomeActivity extends BaseMvpActivity<HomeView, HomePresenter> imple
     private void showNoNetworkConnectivityDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(getString(R.string.home_screen_internet_connection_message))
-                .setCancelable(false)
                 .setPositiveButton(getString(R.string.home_screen_internet_connection_ok), (dialog, which) ->
                         startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS)))
                 .setNegativeButton(getString(R.string.home_screen_internet_connection_no), (dialog, which) -> finish());
