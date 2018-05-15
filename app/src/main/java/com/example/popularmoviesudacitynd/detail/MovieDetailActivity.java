@@ -10,8 +10,11 @@ import android.widget.TextView;
 
 import com.example.popularmoviesudacitynd.BaseMvpActivity;
 import com.example.popularmoviesudacitynd.R;
+import com.example.popularmoviesudacitynd.network.MovieTrailer;
 import com.example.popularmoviesudacitynd.network.ResultsItem;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -64,5 +67,20 @@ public class MovieDetailActivity extends BaseMvpActivity<DetailView, DetailPrese
     @Override
     public DetailPresenter createPresenter() {
         return new DetailPresenter();
+    }
+
+    @Override
+    public void onStartLoading() {
+
+    }
+
+    @Override
+    public void onLoadCompleted(List<MovieTrailer> data) {
+
+    }
+
+    @Override
+    public void onLoadError() {
+
     }
 }
