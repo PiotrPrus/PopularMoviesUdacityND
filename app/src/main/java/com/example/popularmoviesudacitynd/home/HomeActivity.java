@@ -22,9 +22,8 @@ import android.widget.Toast;
 import com.example.popularmoviesudacitynd.BaseMvpActivity;
 import com.example.popularmoviesudacitynd.R;
 import com.example.popularmoviesudacitynd.network.ResultsItem;
-import com.example.popularmoviesudacitynd.recycler.PosterRecyclerAdapter;
+import com.example.popularmoviesudacitynd.home.recycler.PosterRecyclerAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;

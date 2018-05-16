@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -37,12 +38,20 @@ public class MovieDetailActivity extends BaseMvpActivity<DetailView, DetailPrese
     ImageView posterIv;
     @BindView(R.id.detail_toolbar)
     Toolbar detailToolbar;
+    @BindView(R.id.trailers_recycler_view)
+    RecyclerView trailersRecyclerView;
+    @BindView(R.id.reviews_recycler_view)
+    RecyclerView reviewsRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
         ResultsItem movie = getIntent().getExtras().getParcelable(ResultsItem.KEY_MOVIE_DATA);
+        initViews(movie);
+    }
+
+    private void initViews(ResultsItem movie) {
         overviewTv.setText(movie.getOverview());
         titleTv.setText(movie.getTitle());
         initAppBar(movie.getTitle());
