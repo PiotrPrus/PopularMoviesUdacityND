@@ -13,4 +13,5 @@
     <string name="home_screen_internet_connection_message">In order to use this application, you need to enable internet connection</string>
     <string name="home_screen_internet_connection_no">Quit</string>
     <string name="home_screen_internet_connection_ok">Settings</string>
+    <string name="detail_trailers_heading">Trailers</string>
 </resources>
