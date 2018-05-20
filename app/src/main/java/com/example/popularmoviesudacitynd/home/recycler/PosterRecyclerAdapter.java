@@ -1,4 +1,4 @@
-package com.example.popularmoviesudacitynd.recycler;
+package com.example.popularmoviesudacitynd.home.recycler;
 
 import android.app.Activity;
 import android.content.Intent;

@@ -1,4 +1,4 @@
-package com.example.popularmoviesudacitynd.recycler;
+package com.example.popularmoviesudacitynd.home.recycler;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
