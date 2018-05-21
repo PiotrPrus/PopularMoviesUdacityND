@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -12,9 +13,11 @@ import android.widget.TextView;
 
 import com.example.popularmoviesudacitynd.BaseMvpActivity;
 import com.example.popularmoviesudacitynd.R;
+import com.example.popularmoviesudacitynd.detail.reviewsrecycler.ReviewRecyclerAdapter;
 import com.example.popularmoviesudacitynd.detail.trailersrecycler.TrailerRecyclerAdapter;
 import com.example.popularmoviesudacitynd.network.MovieTrailer;
 import com.example.popularmoviesudacitynd.network.ResultsItem;
+import com.example.popularmoviesudacitynd.network.Review;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -46,6 +49,7 @@ public class MovieDetailActivity extends BaseMvpActivity<DetailView, DetailPrese
     RecyclerView reviewsRecyclerView;
 
     private TrailerRecyclerAdapter trailerRecyclerAdapter;
+    private ReviewRecyclerAdapter reviewRecyclerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,10 +58,22 @@ public class MovieDetailActivity extends BaseMvpActivity<DetailView, DetailPrese
         ResultsItem movie = getIntent().getExtras().getParcelable(ResultsItem.KEY_MOVIE_DATA);
         initViews(movie);
         initRecyclerViews();
-        presenter.loadData(movie.getId());
+        presenter.loadData(movie.getId(), DetailPresenter.DetailDataType.TRAILER);
+        presenter.loadData(movie.getId(), DetailPresenter.DetailDataType.REVIEW);
     }
 
     private void initRecyclerViews() {
+        initTrailersRV();
+        initReviewsRV();
+    }
+
+    private void initReviewsRV() {
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2, RecyclerView.VERTICAL, false);
+        reviewsRecyclerView.setLayoutManager(layoutManager);
+        reviewRecyclerAdapter = new ReviewRecyclerAdapter(this);
+    }
+
+    private void initTrailersRV() {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false);
         trailersRecyclerView.setLayoutManager(layoutManager);
         trailerRecyclerAdapter = new TrailerRecyclerAdapter(this);
@@ -92,11 +108,11 @@ public class MovieDetailActivity extends BaseMvpActivity<DetailView, DetailPrese
 
     @Override
     public void onStartLoading() {
-
+        //TODO: init progressBar
     }
 
     @Override
-    public void onLoadCompleted(List<MovieTrailer> data) {
+    public void onTrailersLoadCompleted(List<MovieTrailer> data) {
         //TODO: Introduce the progressbar here
         trailerRecyclerAdapter.setData(data);
         trailersRecyclerView.setAdapter(trailerRecyclerAdapter);
@@ -105,7 +121,15 @@ public class MovieDetailActivity extends BaseMvpActivity<DetailView, DetailPrese
     }
 
     @Override
-    public void onLoadError() {
+    public void onReviewsLoadCompleted(List<Review> data) {
+        //TODO: Introduce the progressbar here
+        reviewRecyclerAdapter.setData(data);
+        reviewsRecyclerView.setAdapter(reviewRecyclerAdapter);
+        reviewRecyclerAdapter.notifyDataSetChanged();
+    }
 
+    @Override
+    public void onLoadError() {
+        //TODO: Add toast here
     }
 }

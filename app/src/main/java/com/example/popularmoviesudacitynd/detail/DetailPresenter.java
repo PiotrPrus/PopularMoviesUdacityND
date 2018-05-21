@@ -4,11 +4,10 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.example.popularmoviesudacitynd.BuildConfig;
-import com.example.popularmoviesudacitynd.home.HomePresenter;
 import com.example.popularmoviesudacitynd.network.MovieTrailer;
 import com.example.popularmoviesudacitynd.network.MovieTrailerList;
-import com.example.popularmoviesudacitynd.network.PopularMoviePOJO;
-import com.example.popularmoviesudacitynd.network.ResultsItem;
+import com.example.popularmoviesudacitynd.network.Review;
+import com.example.popularmoviesudacitynd.network.ReviewList;
 import com.example.popularmoviesudacitynd.network.TMDBService;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
@@ -23,15 +22,49 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class DetailPresenter extends MvpBasePresenter<DetailView> {
     private final static String TAG = DetailPresenter.class.getSimpleName();
-    private List<MovieTrailer> data;
+    private List<MovieTrailer> trailerList;
+    private List<Review> reviewList;
+    private TMDBService service;
+    private int movieId;
 
-    public void loadData(int movieId) {
-        Objects.requireNonNull(getView()).onStartLoading();
+    public void loadData(int movieId, DetailDataType dataType) {
+        this.movieId = movieId;
+        Objects.requireNonNull(getView()). onStartLoading();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://api.themoviedb.org/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        TMDBService service = retrofit.create(TMDBService.class);
+        service = retrofit.create(TMDBService.class);
+        if (dataType == DetailDataType.TRAILER) {
+            fetchMovieTrailers();
+        } else if (dataType == DetailDataType.REVIEW){
+            fetchMovieReviews();
+        }
+    }
+
+    private void fetchMovieReviews() {
+        Call<ReviewList> call = service.getMovieReviewsJson(movieId, BuildConfig.TMDB_API_KEY);
+
+        Objects.requireNonNull(call).enqueue(new Callback<ReviewList>() {
+            @Override
+            public void onResponse(Call<ReviewList> call, Response<ReviewList> response) {
+                ReviewList jsonResponse = response.body();
+                assert jsonResponse != null;
+                reviewList = jsonResponse.getResults();
+                Log.i(TAG, "Number of reviews fetched: " + reviewList.size());
+                Objects.requireNonNull(getView()).onReviewsLoadCompleted(reviewList);
+
+            }
+
+            @Override
+            public void onFailure(Call<ReviewList> call, Throwable t) {
+                Log.w(TAG, "Error trying parse Json" + t.getMessage());
+                Objects.requireNonNull(getView()).onLoadError();
+            }
+        });
+    }
+
+    private void fetchMovieTrailers() {
         Call<MovieTrailerList> call = service.getMovieTrailersJson(movieId, BuildConfig.TMDB_API_KEY);
 
         Objects.requireNonNull(call).enqueue(new Callback<MovieTrailerList>() {
@@ -40,9 +73,9 @@ public class DetailPresenter extends MvpBasePresenter<DetailView> {
 
                 MovieTrailerList jsonResponse = response.body();
                 assert jsonResponse != null;
-                data = jsonResponse.getResults();
-                Log.i(TAG, "Number of trailers fetched: " + data.size());
-                Objects.requireNonNull(getView()).onLoadCompleted(data);
+                trailerList = jsonResponse.getResults();
+                Log.i(TAG, "Number of trailers fetched: " + trailerList.size());
+                Objects.requireNonNull(getView()).onTrailersLoadCompleted(trailerList);
             }
 
             @Override
@@ -51,5 +84,9 @@ public class DetailPresenter extends MvpBasePresenter<DetailView> {
                 Objects.requireNonNull(getView()).onLoadError();
             }
         });
+    }
+
+    enum DetailDataType {
+        TRAILER, REVIEW
     }
 }

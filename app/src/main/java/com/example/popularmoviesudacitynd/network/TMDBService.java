@@ -13,5 +13,5 @@ public interface TMDBService {
     @GET("3/movie/{id}/videos")
     Call<MovieTrailerList> getMovieTrailersJson(@Path("id") int movieId, @Query("api_key") String apiKey);
     @GET("3/movie/{id}/reviews")
-    Call<MovieTrailerList> getMovieReviewsJson(@Path("id") int movieId, @Query("api_key") String apiKey);
+    Call<ReviewList> getMovieReviewsJson(@Path("id") int movieId, @Query("api_key") String apiKey);
 }
