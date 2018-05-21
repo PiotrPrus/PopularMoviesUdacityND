@@ -39,15 +39,19 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewViewHolder
     public void onBindViewHolder(@NonNull ReviewViewHolder holder, int position) {
         review = data.get(position);
         onBindReviewItemViewOnPosition(holder);
-        holder.itemView.setOnClickListener(view -> showDialog(review.getContent()));
+        holder.itemView.setOnClickListener(view -> {
+            Review currentReview = data.get(position);
+            showDialog(currentReview.getContent(), currentReview.getAuthor());});
     }
 
-    private void showDialog(String content) {
+    private void showDialog(String content, String author) {
         final Dialog dialog = new Dialog(activity);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.review_preview_dialog);
         TextView contentTV = dialog.findViewById(R.id.review_dialog_content_tv);
         contentTV.setText(content);
+        TextView authorTV = dialog.findViewById(R.id.review_dialog_author_tv);
+        authorTV.setText(author);
         dialog.show();
     }
 
