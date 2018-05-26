@@ -1,7 +1,9 @@
 package com.example.popularmoviesudacitynd.detail.reviewsrecycler;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,7 +22,7 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewViewHolder
     private Review review;
     private Activity activity;
 
-    public void setData(List<Review> data){
+    public void setData(List<Review> data) {
         this.data = data;
     }
 
@@ -41,17 +43,17 @@ public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewViewHolder
         onBindReviewItemViewOnPosition(holder);
         holder.itemView.setOnClickListener(view -> {
             Review currentReview = data.get(position);
-            showDialog(currentReview.getContent(), currentReview.getAuthor());});
+            showDialog(currentReview.getContent(), currentReview.getAuthor());
+        });
     }
 
     private void showDialog(String content, String author) {
-        final Dialog dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.review_preview_dialog);
-        TextView contentTV = dialog.findViewById(R.id.review_dialog_content_tv);
-        contentTV.setText(content);
-        TextView authorTV = dialog.findViewById(R.id.review_dialog_author_tv);
-        authorTV.setText(author);
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle(author + " says:")
+                .setMessage(content)
+                .setPositiveButton(R.string.generic_ok,
+                        (dialogInterface, i) -> dialogInterface.dismiss());
+        AlertDialog dialog = builder.create();
         dialog.show();
     }
 
