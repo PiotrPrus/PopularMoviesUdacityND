@@ -11,4 +11,6 @@ public interface DetailView extends MvpView {
     void onTrailersLoadCompleted(List<MovieTrailer> data);
     void onReviewsLoadCompleted(List<Review> data);
     void onLoadError();
+    void onFavouriteAdded();
+    void onFavouriteRemoved();
 }
