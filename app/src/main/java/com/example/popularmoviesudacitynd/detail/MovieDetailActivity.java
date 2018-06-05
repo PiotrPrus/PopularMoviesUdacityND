@@ -2,8 +2,6 @@ package com.example.popularmoviesudacitynd.detail;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,6 +22,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MovieDetailActivity extends BaseMvpActivity<DetailView, DetailPresenter> implements DetailView {
 
@@ -47,6 +46,11 @@ public class MovieDetailActivity extends BaseMvpActivity<DetailView, DetailPrese
     RecyclerView trailersRecyclerView;
     @BindView(R.id.reviews_recycler_view)
     RecyclerView reviewsRecyclerView;
+    @OnClick(R.id.floatingActionButton)
+    public void favouriteClicked() {
+        presenter.handleFavourite();
+    }
+
 
     private TrailerRecyclerAdapter trailerRecyclerAdapter;
     private ReviewRecyclerAdapter reviewRecyclerAdapter;
@@ -131,5 +135,15 @@ public class MovieDetailActivity extends BaseMvpActivity<DetailView, DetailPrese
     @Override
     public void onLoadError() {
         //TODO: Add toast here
+    }
+
+    @Override
+    public void onFavouriteAdded() {
+
+    }
+
+    @Override
+    public void onFavouriteRemoved() {
+
     }
 }

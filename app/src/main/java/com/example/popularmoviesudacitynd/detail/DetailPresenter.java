@@ -89,4 +89,8 @@ public class DetailPresenter extends MvpBasePresenter<DetailView> {
     enum DetailDataType {
         TRAILER, REVIEW
     }
+
+    public void handleFavourite() {
+
+    }
 }
