@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import java.util.List;
 import com.google.gson.annotations.SerializedName;
 
-public class ResultsItem implements Parcelable{
+public class Movie implements Parcelable{
 
 	public static final String KEY_MOVIE_DATA = "KEY_MOVIE_DATA";
 
@@ -52,10 +52,10 @@ public class ResultsItem implements Parcelable{
 	@SerializedName("vote_count")
 	private int voteCount;
 
-	public ResultsItem(String overview, String originalLanguage, String originalTitle, boolean video,
-					   String title, List<Integer> genreIds, String posterPath, String backdropPath,
-					   String releaseDate, double voteAverage, double popularity, int id,
-					   boolean adult, int voteCount) {
+	public Movie(String overview, String originalLanguage, String originalTitle, boolean video,
+				 String title, List<Integer> genreIds, String posterPath, String backdropPath,
+				 String releaseDate, double voteAverage, double popularity, int id,
+				 boolean adult, int voteCount) {
 		this.overview = overview;
 		this.originalLanguage = originalLanguage;
 		this.originalTitle = originalTitle;
@@ -72,7 +72,7 @@ public class ResultsItem implements Parcelable{
 		this.voteCount = voteCount;
 	}
 
-	public ResultsItem(Parcel in) {
+	public Movie(Parcel in) {
 		overview = in.readString();
 		originalLanguage = in.readString();
 		originalTitle = in.readString();
@@ -88,15 +88,15 @@ public class ResultsItem implements Parcelable{
 		voteCount = in.readInt();
 	}
 
-	public static final Creator<ResultsItem> CREATOR = new Creator<ResultsItem>() {
+	public static final Creator<Movie> CREATOR = new Creator<Movie>() {
 		@Override
-		public ResultsItem createFromParcel(Parcel in) {
-			return new ResultsItem(in);
+		public Movie createFromParcel(Parcel in) {
+			return new Movie(in);
 		}
 
 		@Override
-		public ResultsItem[] newArray(int size) {
-			return new ResultsItem[size];
+		public Movie[] newArray(int size) {
+			return new Movie[size];
 		}
 	};
 
@@ -237,7 +237,7 @@ public class ResultsItem implements Parcelable{
 	@Override
  	public String toString(){
 		return
-			"ResultsItem{" +
+			"Movie{" +
 			"overview = '" + overview + '\'' +
 			",original_language = '" + originalLanguage + '\'' +
 			",original_title = '" + originalTitle + '\'' +

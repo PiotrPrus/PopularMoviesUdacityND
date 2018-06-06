@@ -1,5 +1,6 @@
 package com.example.popularmoviesudacitynd.detail;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
@@ -11,14 +12,16 @@ import android.widget.TextView;
 
 import com.example.popularmoviesudacitynd.BaseMvpActivity;
 import com.example.popularmoviesudacitynd.R;
+import com.example.popularmoviesudacitynd.database.MoviesDatabaseHelper;
 import com.example.popularmoviesudacitynd.detail.reviewsrecycler.ReviewRecyclerAdapter;
 import com.example.popularmoviesudacitynd.detail.trailersrecycler.TrailerRecyclerAdapter;
+import com.example.popularmoviesudacitynd.network.Movie;
 import com.example.popularmoviesudacitynd.network.MovieTrailer;
-import com.example.popularmoviesudacitynd.network.ResultsItem;
 import com.example.popularmoviesudacitynd.network.Review;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,11 +49,13 @@ public class MovieDetailActivity extends BaseMvpActivity<DetailView, DetailPrese
     RecyclerView trailersRecyclerView;
     @BindView(R.id.reviews_recycler_view)
     RecyclerView reviewsRecyclerView;
+    private Movie movie;
+    private SQLiteDatabase sqLiteDatabase;
+
     @OnClick(R.id.floatingActionButton)
     public void favouriteClicked() {
-        presenter.handleFavourite();
+        presenter.handleFavourite(movie, sqLiteDatabase);
     }
-
 
     private TrailerRecyclerAdapter trailerRecyclerAdapter;
     private ReviewRecyclerAdapter reviewRecyclerAdapter;
@@ -59,7 +64,10 @@ public class MovieDetailActivity extends BaseMvpActivity<DetailView, DetailPrese
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
-        ResultsItem movie = getIntent().getExtras().getParcelable(ResultsItem.KEY_MOVIE_DATA);
+        movie = Objects.requireNonNull(getIntent().getExtras()).getParcelable(Movie.KEY_MOVIE_DATA);
+        assert movie != null;
+        MoviesDatabaseHelper dbHelper = new MoviesDatabaseHelper(this);
+        sqLiteDatabase = dbHelper.getReadableDatabase();
         initViews(movie);
         initRecyclerViews();
         presenter.loadData(movie.getId(), DetailPresenter.DetailDataType.TRAILER);
@@ -83,7 +91,7 @@ public class MovieDetailActivity extends BaseMvpActivity<DetailView, DetailPrese
         trailerRecyclerAdapter = new TrailerRecyclerAdapter(this);
     }
 
-    private void initViews(ResultsItem movie) {
+    private void initViews(Movie movie) {
         overviewTv.setText(movie.getOverview());
         titleTv.setText(movie.getTitle());
         initAppBar(movie.getTitle());
