@@ -23,6 +23,10 @@
         <activity
             android:name=".detail.MovieDetailActivity"
             android:parentActivityName=".home.HomeActivity" />
+        <provider
+            android:authorities="com.example.popularmoviesudacitynd"
+            android:name=".database.MoviesContentProvider"
+            android:exported="false"/>
     </application>
 
 </manifest>
