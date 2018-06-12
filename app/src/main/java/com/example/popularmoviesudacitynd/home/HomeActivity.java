@@ -2,7 +2,6 @@ package com.example.popularmoviesudacitynd.home;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -22,7 +21,7 @@ import android.widget.Toast;
 
 import com.example.popularmoviesudacitynd.BaseMvpActivity;
 import com.example.popularmoviesudacitynd.R;
-import com.example.popularmoviesudacitynd.database.MoviesDatabaseHelper;
+import com.example.popularmoviesudacitynd.database.MoviesDatabaseManager;
 import com.example.popularmoviesudacitynd.network.Movie;
 import com.example.popularmoviesudacitynd.home.recycler.PosterRecyclerAdapter;
 
@@ -45,8 +44,6 @@ public class HomeActivity extends BaseMvpActivity<HomeView, HomePresenter> imple
     Toolbar homeToolbar;
 
     private PosterRecyclerAdapter adapter;
-    private SQLiteDatabase sqLiteDatabase;
-
     @Override
     public int getLayoutId() {
         return R.layout.activity_home;
@@ -98,7 +95,8 @@ public class HomeActivity extends BaseMvpActivity<HomeView, HomePresenter> imple
                     break;
                 }
                 case R.id.nav_favorite: {
-                    //do something here
+                    MoviesDatabaseManager dbManager = new MoviesDatabaseManager(getContentResolver());
+                    presenter.loadFavourites(dbManager);
                     break;
                 }
             }

@@ -17,5 +17,9 @@ public class MoviesContract {
         public static final String COLUMN_NAME_TITLE = "title";
         public static final String COLUMN_NAME_POSTER_PATH = "posterPath";
         public static final String COLUMN_NAME_MOVIE_ID = "id";
+        public static final String COLUMN_NAME_MOVIE_RATING = "movieRating";
+        public static final String COLUMN_NAME_BACKDROP_PATH = "backdropPath";
+        public static final String COLUMN_NAME_MOVIE_OVERVIEW = "overview";
+        public static final String COLUMN_NAME_MOVIE_DATE = "movieDate";
     }
 }

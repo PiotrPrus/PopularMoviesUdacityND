@@ -10,7 +10,7 @@ public interface DatabaseManager {
 
     void removeMovieFromFavourite(String id);
 
-    List<Movie> getFavouriteMoviewsList();
+    List<Movie> getFavouriteMoviesList();
 
     boolean isFavourite(String id);
 }

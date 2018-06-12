@@ -1,12 +1,10 @@
 package com.example.popularmoviesudacitynd.detail;
 
-import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.example.popularmoviesudacitynd.BuildConfig;
-import com.example.popularmoviesudacitynd.database.MovieContentValues;
-import com.example.popularmoviesudacitynd.database.MoviesContract;
+import com.example.popularmoviesudacitynd.database.MoviesDatabaseManager;
 import com.example.popularmoviesudacitynd.network.Movie;
 import com.example.popularmoviesudacitynd.network.MovieTrailer;
 import com.example.popularmoviesudacitynd.network.MovieTrailerList;
@@ -30,6 +28,11 @@ public class DetailPresenter extends MvpBasePresenter<DetailView> {
     private List<Review> reviewList;
     private TMDBService service;
     private int movieId;
+    private MoviesDatabaseManager dbManager;
+
+    public DetailPresenter(MoviesDatabaseManager dbManager) {
+        this.dbManager = dbManager;
+    }
 
     public void loadData(int movieId, DetailDataType dataType) {
         this.movieId = movieId;
@@ -94,19 +97,24 @@ public class DetailPresenter extends MvpBasePresenter<DetailView> {
         TRAILER, REVIEW
     }
 
-    public void handleFavourite(Movie movie, SQLiteDatabase sqLiteDatabase) {
-        //insert movie
-        addMovieToDb(movie, sqLiteDatabase);
-        //remove movie
-        long id = 1;
-        removeMovieFromDb(id, sqLiteDatabase);
+    public void handleFavourite(Movie movie) {
+        String id = String.valueOf(movie.getId());
+        if (!dbManager.isFavourite(id)){
+            addMovieToDb(movie);
+            Objects.requireNonNull(getView()).onFavouriteAdded();
+            Log.d(TAG, "Movie added to favourites: " + id);
+        } else {
+            removeMovieFromDb(id);
+            Objects.requireNonNull(getView()).onFavouriteRemoved();
+            Log.d(TAG, "Movie removed from favourites: " + id);
+        }
     }
 
-    private void removeMovieFromDb(long id, SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.delete(MoviesContract.MoviesEntry.TABLE_NAME, MoviesContract.MoviesEntry.COLUMN_NAME_MOVIE_ID + "=" + id, null);
+    private void removeMovieFromDb(String id) {
+        dbManager.removeMovieFromFavourite(id);
     }
 
-    private void addMovieToDb(Movie movie, SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.insert(MoviesContract.MoviesEntry.TABLE_NAME, null, MovieContentValues.addMovie(movie));
+    private void addMovieToDb(Movie movie) {
+        dbManager.addMovieToFavourite(movie);
     }
 }

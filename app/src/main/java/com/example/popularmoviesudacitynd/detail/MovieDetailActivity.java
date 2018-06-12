@@ -1,6 +1,5 @@
 package com.example.popularmoviesudacitynd.detail;
 
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
@@ -12,7 +11,7 @@ import android.widget.TextView;
 
 import com.example.popularmoviesudacitynd.BaseMvpActivity;
 import com.example.popularmoviesudacitynd.R;
-import com.example.popularmoviesudacitynd.database.MoviesDatabaseHelper;
+import com.example.popularmoviesudacitynd.database.MoviesDatabaseManager;
 import com.example.popularmoviesudacitynd.detail.reviewsrecycler.ReviewRecyclerAdapter;
 import com.example.popularmoviesudacitynd.detail.trailersrecycler.TrailerRecyclerAdapter;
 import com.example.popularmoviesudacitynd.network.Movie;
@@ -50,11 +49,11 @@ public class MovieDetailActivity extends BaseMvpActivity<DetailView, DetailPrese
     @BindView(R.id.reviews_recycler_view)
     RecyclerView reviewsRecyclerView;
     private Movie movie;
-    private SQLiteDatabase sqLiteDatabase;
+    private MoviesDatabaseManager dbManager;
 
     @OnClick(R.id.floatingActionButton)
     public void favouriteClicked() {
-        presenter.handleFavourite(movie, sqLiteDatabase);
+        presenter.handleFavourite(movie);
     }
 
     private TrailerRecyclerAdapter trailerRecyclerAdapter;
@@ -64,10 +63,9 @@ public class MovieDetailActivity extends BaseMvpActivity<DetailView, DetailPrese
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
+
         movie = Objects.requireNonNull(getIntent().getExtras()).getParcelable(Movie.KEY_MOVIE_DATA);
         assert movie != null;
-        MoviesDatabaseHelper dbHelper = new MoviesDatabaseHelper(this);
-        sqLiteDatabase = dbHelper.getReadableDatabase();
         initViews(movie);
         initRecyclerViews();
         presenter.loadData(movie.getId(), DetailPresenter.DetailDataType.TRAILER);
@@ -115,7 +113,8 @@ public class MovieDetailActivity extends BaseMvpActivity<DetailView, DetailPrese
     @NonNull
     @Override
     public DetailPresenter createPresenter() {
-        return new DetailPresenter();
+        dbManager = new MoviesDatabaseManager(getContentResolver());
+        return new DetailPresenter(dbManager);
     }
 
     @Override
