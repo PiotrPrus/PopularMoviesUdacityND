@@ -9,20 +9,20 @@ import android.view.ViewGroup;
 
 import com.example.popularmoviesudacitynd.R;
 import com.example.popularmoviesudacitynd.detail.MovieDetailActivity;
-import com.example.popularmoviesudacitynd.network.ResultsItem;
+import com.example.popularmoviesudacitynd.network.Movie;
 
 import java.util.List;
 
 public class PosterRecyclerAdapter extends RecyclerView.Adapter<PosterViewHolder>{
 
     private Activity activity;
-    private List<ResultsItem> data;
+    private List<Movie> data;
 
     public PosterRecyclerAdapter(Activity activity) {
         this.activity = activity;
     }
 
-    public void setData(List<ResultsItem> data) {
+    public void setData(List<Movie> data) {
         this.data = data;
     }
 
@@ -38,8 +38,8 @@ public class PosterRecyclerAdapter extends RecyclerView.Adapter<PosterViewHolder
         onBindPosterItemViewAtPosition(position, holder);
         holder.itemView.setOnClickListener(view -> {
             Intent intent = new Intent(activity, MovieDetailActivity.class);
-            ResultsItem item = data.get(position);
-            intent.putExtra(ResultsItem.KEY_MOVIE_DATA, item);
+            Movie item = data.get(position);
+            intent.putExtra(Movie.KEY_MOVIE_DATA, item);
             activity.getApplicationContext().startActivity(intent);
         });
     }
@@ -50,7 +50,7 @@ public class PosterRecyclerAdapter extends RecyclerView.Adapter<PosterViewHolder
     }
 
     private void onBindPosterItemViewAtPosition(int position, PosterItemView itemView){
-        ResultsItem movie = data.get(position);
+        Movie movie = data.get(position);
         itemView.setImage(movie.getPosterPath());
     }
 }

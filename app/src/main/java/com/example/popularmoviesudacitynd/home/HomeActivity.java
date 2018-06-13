@@ -21,7 +21,8 @@ import android.widget.Toast;
 
 import com.example.popularmoviesudacitynd.BaseMvpActivity;
 import com.example.popularmoviesudacitynd.R;
-import com.example.popularmoviesudacitynd.network.ResultsItem;
+import com.example.popularmoviesudacitynd.database.MoviesDatabaseManager;
+import com.example.popularmoviesudacitynd.network.Movie;
 import com.example.popularmoviesudacitynd.home.recycler.PosterRecyclerAdapter;
 
 import java.util.List;
@@ -43,7 +44,6 @@ public class HomeActivity extends BaseMvpActivity<HomeView, HomePresenter> imple
     Toolbar homeToolbar;
 
     private PosterRecyclerAdapter adapter;
-
     @Override
     public int getLayoutId() {
         return R.layout.activity_home;
@@ -95,7 +95,8 @@ public class HomeActivity extends BaseMvpActivity<HomeView, HomePresenter> imple
                     break;
                 }
                 case R.id.nav_favorite: {
-                    //do something here
+                    MoviesDatabaseManager dbManager = new MoviesDatabaseManager(getContentResolver());
+                    presenter.loadFavourites(dbManager);
                     break;
                 }
             }
@@ -117,7 +118,7 @@ public class HomeActivity extends BaseMvpActivity<HomeView, HomePresenter> imple
     }
 
     @Override
-    public void onLoadCompleted(List<ResultsItem> data) {
+    public void onLoadCompleted(List<Movie> data) {
         homeProgressBar.setVisibility(View.GONE);
         adapter.setData(data);
         recyclerView.setAdapter(adapter);

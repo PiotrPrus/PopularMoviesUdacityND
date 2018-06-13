@@ -2,23 +2,29 @@ package com.example.popularmoviesudacitynd.detail;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.popularmoviesudacitynd.BaseMvpActivity;
 import com.example.popularmoviesudacitynd.R;
+import com.example.popularmoviesudacitynd.database.MoviesDatabaseManager;
 import com.example.popularmoviesudacitynd.detail.reviewsrecycler.ReviewRecyclerAdapter;
 import com.example.popularmoviesudacitynd.detail.trailersrecycler.TrailerRecyclerAdapter;
+import com.example.popularmoviesudacitynd.network.Movie;
 import com.example.popularmoviesudacitynd.network.MovieTrailer;
-import com.example.popularmoviesudacitynd.network.ResultsItem;
 import com.example.popularmoviesudacitynd.network.Review;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,11 +52,20 @@ public class MovieDetailActivity extends BaseMvpActivity<DetailView, DetailPrese
     RecyclerView trailersRecyclerView;
     @BindView(R.id.reviews_recycler_view)
     RecyclerView reviewsRecyclerView;
+    @BindView(R.id.floatingActionButton)
+    FloatingActionButton favButton;
+    @BindView(R.id.detail_reviews_progress_bar)
+    ProgressBar reviewsProgressBar;
+    @BindView(R.id.detail_trailers_progress_bar)
+    ProgressBar trailersProgressBar;
+
+
+    private Movie movie;
+
     @OnClick(R.id.floatingActionButton)
     public void favouriteClicked() {
-        presenter.handleFavourite();
+        presenter.handleFavourite(movie);
     }
-
 
     private TrailerRecyclerAdapter trailerRecyclerAdapter;
     private ReviewRecyclerAdapter reviewRecyclerAdapter;
@@ -59,8 +74,11 @@ public class MovieDetailActivity extends BaseMvpActivity<DetailView, DetailPrese
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
-        ResultsItem movie = getIntent().getExtras().getParcelable(ResultsItem.KEY_MOVIE_DATA);
+
+        movie = Objects.requireNonNull(getIntent().getExtras()).getParcelable(Movie.KEY_MOVIE_DATA);
+        assert movie != null;
         initViews(movie);
+        presenter.loadFavouriteButton(String.valueOf(movie.getId()));
         initRecyclerViews();
         presenter.loadData(movie.getId(), DetailPresenter.DetailDataType.TRAILER);
         presenter.loadData(movie.getId(), DetailPresenter.DetailDataType.REVIEW);
@@ -83,7 +101,7 @@ public class MovieDetailActivity extends BaseMvpActivity<DetailView, DetailPrese
         trailerRecyclerAdapter = new TrailerRecyclerAdapter(this);
     }
 
-    private void initViews(ResultsItem movie) {
+    private void initViews(Movie movie) {
         overviewTv.setText(movie.getOverview());
         titleTv.setText(movie.getTitle());
         initAppBar(movie.getTitle());
@@ -107,17 +125,22 @@ public class MovieDetailActivity extends BaseMvpActivity<DetailView, DetailPrese
     @NonNull
     @Override
     public DetailPresenter createPresenter() {
-        return new DetailPresenter();
+        MoviesDatabaseManager dbManager = new MoviesDatabaseManager(getContentResolver());
+        return new DetailPresenter(dbManager);
     }
 
     @Override
-    public void onStartLoading() {
-        //TODO: init progressBar
+    public void onStartLoading(DetailPresenter.DetailDataType dataType) {
+        if (dataType == DetailPresenter.DetailDataType.REVIEW) {
+            reviewsProgressBar.setVisibility(View.VISIBLE);
+        } else if (dataType == DetailPresenter.DetailDataType.TRAILER) {
+            trailersProgressBar.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
     public void onTrailersLoadCompleted(List<MovieTrailer> data) {
-        //TODO: Introduce the progressbar here
+        trailersProgressBar.setVisibility(View.GONE);
         trailerRecyclerAdapter.setData(data);
         trailersRecyclerView.setAdapter(trailerRecyclerAdapter);
         trailerRecyclerAdapter.notifyDataSetChanged();
@@ -126,7 +149,7 @@ public class MovieDetailActivity extends BaseMvpActivity<DetailView, DetailPrese
 
     @Override
     public void onReviewsLoadCompleted(List<Review> data) {
-        //TODO: Introduce the progressbar here
+        reviewsProgressBar.setVisibility(View.GONE);
         reviewRecyclerAdapter.setData(data);
         reviewsRecyclerView.setAdapter(reviewRecyclerAdapter);
         reviewRecyclerAdapter.notifyDataSetChanged();
@@ -134,16 +157,17 @@ public class MovieDetailActivity extends BaseMvpActivity<DetailView, DetailPrese
 
     @Override
     public void onLoadError() {
-        //TODO: Add toast here
-    }
-
-    @Override
-    public void onFavouriteAdded() {
+        Toast.makeText(this, getString(R.string.detail_load_content_error), Toast.LENGTH_SHORT).show();
 
     }
 
     @Override
-    public void onFavouriteRemoved() {
+    public void checkFavourite() {
+        favButton.setColorFilter(getResources().getColor(R.color.fav_color_red));
+    }
 
+    @Override
+    public void uncheckFavourite() {
+        favButton.setColorFilter(getResources().getColor(R.color.fav_color_white));
     }
 }

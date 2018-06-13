@@ -6,8 +6,10 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.example.popularmoviesudacitynd.BuildConfig;
+import com.example.popularmoviesudacitynd.database.DatabaseManager;
+import com.example.popularmoviesudacitynd.database.MoviesDatabaseManager;
+import com.example.popularmoviesudacitynd.network.Movie;
 import com.example.popularmoviesudacitynd.network.PopularMoviePOJO;
-import com.example.popularmoviesudacitynd.network.ResultsItem;
 import com.example.popularmoviesudacitynd.network.TMDBService;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
@@ -23,7 +25,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class HomePresenter extends MvpBasePresenter<HomeView> {
 
     private final static String TAG = HomePresenter.class.getSimpleName();
-    private List<ResultsItem> data;
+    private List<Movie> data;
 
     public void loadData(MovieListType listType) {
         Objects.requireNonNull(getView()).onStartLoading();
@@ -66,6 +68,16 @@ public class HomePresenter extends MvpBasePresenter<HomeView> {
             Objects.requireNonNull(getView()).onInternetCheckFailed();
         }
     }
+
+    public void loadFavourites(MoviesDatabaseManager dbManager) {
+        List<Movie> movieList = dbManager.getFavouriteMoviesList();
+        if (movieList.isEmpty()){
+            Objects.requireNonNull(getView()).onLoadError();
+        } else {
+            Objects.requireNonNull(getView()).onLoadCompleted(movieList);
+        }
+    }
+
     enum MovieListType {
         POPULAR, TOP_RATED
     }

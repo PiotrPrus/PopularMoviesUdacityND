@@ -15,4 +15,7 @@
     <string name="home_screen_internet_connection_no">Quit</string>
     <string name="home_screen_internet_connection_ok">Settings</string>
     <string name="detail_trailers_heading">Trailers</string>
+    <string name="detail_reviews_heading">Reviews</string>
+
+    <string name="detail_load_content_error">Failed to fetch data</string>
 </resources>

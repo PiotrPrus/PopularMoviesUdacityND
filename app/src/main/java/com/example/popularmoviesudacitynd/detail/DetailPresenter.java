@@ -4,6 +4,8 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.example.popularmoviesudacitynd.BuildConfig;
+import com.example.popularmoviesudacitynd.database.MoviesDatabaseManager;
+import com.example.popularmoviesudacitynd.network.Movie;
 import com.example.popularmoviesudacitynd.network.MovieTrailer;
 import com.example.popularmoviesudacitynd.network.MovieTrailerList;
 import com.example.popularmoviesudacitynd.network.Review;
@@ -26,10 +28,15 @@ public class DetailPresenter extends MvpBasePresenter<DetailView> {
     private List<Review> reviewList;
     private TMDBService service;
     private int movieId;
+    private MoviesDatabaseManager dbManager;
+
+    public DetailPresenter(MoviesDatabaseManager dbManager) {
+        this.dbManager = dbManager;
+    }
 
     public void loadData(int movieId, DetailDataType dataType) {
         this.movieId = movieId;
-        Objects.requireNonNull(getView()). onStartLoading();
+        Objects.requireNonNull(getView()). onStartLoading(dataType);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://api.themoviedb.org/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -90,7 +97,32 @@ public class DetailPresenter extends MvpBasePresenter<DetailView> {
         TRAILER, REVIEW
     }
 
-    public void handleFavourite() {
+    public void loadFavouriteButton(String id){
+        if (dbManager.isFavourite(id)){
+            getView().checkFavourite();
+        } else {
+            getView().uncheckFavourite();
+        }
+    }
 
+    public void handleFavourite(Movie movie) {
+        String id = String.valueOf(movie.getId());
+        if (!dbManager.isFavourite(id)){
+            addMovieToDb(movie);
+            Objects.requireNonNull(getView()).checkFavourite();
+            Log.d(TAG, "Movie added to favourites: " + id);
+        } else {
+            removeMovieFromDb(id);
+            Objects.requireNonNull(getView()).uncheckFavourite();
+            Log.d(TAG, "Movie removed from favourites: " + id);
+        }
+    }
+
+    private void removeMovieFromDb(String id) {
+        dbManager.removeMovieFromFavourite(id);
+    }
+
+    private void addMovieToDb(Movie movie) {
+        dbManager.addMovieToFavourite(movie);
     }
 }

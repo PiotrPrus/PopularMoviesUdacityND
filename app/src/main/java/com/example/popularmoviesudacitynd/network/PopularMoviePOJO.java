@@ -13,7 +13,7 @@ public class PopularMoviePOJO{
 	private int totalPages;
 
 	@SerializedName("results")
-	private List<ResultsItem> results;
+	private List<Movie> results;
 
 	@SerializedName("total_results")
 	private int totalResults;
@@ -34,11 +34,11 @@ public class PopularMoviePOJO{
 		return totalPages;
 	}
 
-	public void setResults(List<ResultsItem> results){
+	public void setResults(List<Movie> results){
 		this.results = results;
 	}
 
-	public List<ResultsItem> getResults(){
+	public List<Movie> getResults(){
 		return results;
 	}
 
