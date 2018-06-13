@@ -7,10 +7,10 @@ import com.hannesdorfmann.mosby.mvp.MvpView;
 import java.util.List;
 
 public interface DetailView extends MvpView {
-    void onStartLoading();
+    void onStartLoading(DetailPresenter.DetailDataType dataType);
     void onTrailersLoadCompleted(List<MovieTrailer> data);
     void onReviewsLoadCompleted(List<Review> data);
     void onLoadError();
-    void onFavouriteAdded();
-    void onFavouriteRemoved();
+    void checkFavourite();
+    void uncheckFavourite();
 }

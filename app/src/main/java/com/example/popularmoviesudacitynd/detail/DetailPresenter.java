@@ -36,7 +36,7 @@ public class DetailPresenter extends MvpBasePresenter<DetailView> {
 
     public void loadData(int movieId, DetailDataType dataType) {
         this.movieId = movieId;
-        Objects.requireNonNull(getView()). onStartLoading();
+        Objects.requireNonNull(getView()). onStartLoading(dataType);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://api.themoviedb.org/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -97,15 +97,23 @@ public class DetailPresenter extends MvpBasePresenter<DetailView> {
         TRAILER, REVIEW
     }
 
+    public void loadFavouriteButton(String id){
+        if (dbManager.isFavourite(id)){
+            getView().checkFavourite();
+        } else {
+            getView().uncheckFavourite();
+        }
+    }
+
     public void handleFavourite(Movie movie) {
         String id = String.valueOf(movie.getId());
         if (!dbManager.isFavourite(id)){
             addMovieToDb(movie);
-            Objects.requireNonNull(getView()).onFavouriteAdded();
+            Objects.requireNonNull(getView()).checkFavourite();
             Log.d(TAG, "Movie added to favourites: " + id);
         } else {
             removeMovieFromDb(id);
-            Objects.requireNonNull(getView()).onFavouriteRemoved();
+            Objects.requireNonNull(getView()).uncheckFavourite();
             Log.d(TAG, "Movie removed from favourites: " + id);
         }
     }
